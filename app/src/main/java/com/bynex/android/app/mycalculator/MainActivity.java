@@ -218,10 +218,31 @@ public class MainActivity extends AppCompatActivity {
                         }
                     } else {
                         double currentDouNum = Double.parseDouble(display.getText().toString());
+
+                        // finding previous value from second display
+                        String sDis = displaySecond.getText().toString();
+                        for (int i = 0; i < sDis.length(); i++) {
+                            if (sDis.substring(i, i + 1).equals(" ")) {
+                                sDis = sDis.substring(i, sDis.length());
+                                break;
+                            }
+                        }
+
+
                         res = (currentDouNum + repeatValue) + "";
                         if (res.contains(".")) {
                             if (res.substring(res.length() - 1, res.length()).equals("0")) {
                                 display.setText(res.substring(0, res.length() - 2));
+                                String sCurrentDouNum = currentDouNum + "";
+                                if (sCurrentDouNum.contains(".")) {
+                                    if (sCurrentDouNum.substring(sCurrentDouNum.length() - 1, sCurrentDouNum.length()).equals("0")) {
+                                        displaySecond.setText(sCurrentDouNum.substring(0, sCurrentDouNum.length() - 2) + sDis);
+                                    } else {
+                                        displaySecond.setText(sCurrentDouNum + sDis);
+                                    }
+                                } else {
+                                    displaySecond.setText(sCurrentDouNum + sDis);
+                                }
                             } else {
                                 display.setText(res);
                             }
