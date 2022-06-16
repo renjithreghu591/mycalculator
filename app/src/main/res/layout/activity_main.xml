@@ -18,7 +18,7 @@
         android:autoSizeMinTextSize="12sp"
         android:autoSizeMaxTextSize="100sp"
         android:autoSizeStepGranularity="2sp"
-        android:maxLength="15"
+        android:maxLength="16"
         android:maxLines="1"
         android:paddingRight="10dp"
         android:text="0"
