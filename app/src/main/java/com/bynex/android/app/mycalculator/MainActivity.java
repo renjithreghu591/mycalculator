@@ -12,8 +12,13 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     TextView display, displaySecond;
-    Button one, two, three, four, five, six,seven, eight, nine, zero, dot, equals, multiplication, addition, substraction, divition, percentage, plusminus, delete, clear;
+    Button zero, one, two, three, four, five, six,seven, eight, nine,
+            dot, equals, multiplication, addition, substraction, divition, percentage, plusminus, delete, clear;
     Display dis;
+
+    boolean calc = false, isRepeateValue = false;
+    double prevValue = 0.0, repeatValue = 0.0;
+    String currentOperator = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,78 +30,60 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void zero (View view) {
+        dis.setDisplay(Display.MAIN_DISPLAY, "0");
     }
 
     public void one(View view) {
-        dis.setDisplay(Display.MAIN_DISPLAY, "1");
+        //String currentDisplay = getMainDisplay();
+
+        if (getMainDisplay().length() < 15) {
+            dis.setDisplay(Display.MAIN_DISPLAY, "1");
+        } else {
+            dis.setDisplay(Display.TOAST, "Can't enter more than 15 digits");
+        }
     }
 
     public void two(View view) {
+        //String currentDisplay = getMainDisplay();
+
+        if (getMainDisplay().length() < 15) {
+            dis.setDisplay(Display.MAIN_DISPLAY, "2");
+        } else {
+            dis.setDisplay(Display.TOAST, "Can't enter more than 15 digits");
+        }
     }
 
     public void three(View view) {
-
     }
 
     public void four(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("4");
-        } else {
-            display.setText(dis + "4");
-        }
     }
 
     public void five(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("5");
-        } else {
-            display.setText(dis + "5");
-        }
     }
 
     public void six(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("6");
-        } else {
-            display.setText(dis + "6");
-        }
     }
 
     public void seven(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("7");
-        } else {
-            display.setText(dis + "7");
-        }
     }
 
     public void eight(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("8");
-        } else {
-            display.setText(dis + "8");
-        }
     }
 
     public void nine(View view) {
-        String dis = display.getText().toString();
-        if (dis.equals("0")) {
-            display.setText("9");
-        } else {
-            display.setText(dis + "9");
-        }
     }
 
     public void delete(View view) {
-
+        dis.setDisplay(Display.MAIN_DISPLAY, Display.DEL);
     }
 
     public void clear(View view) {
+        dis.isDisClear = false;
+        prevValue = 0;
+        calc = false;
+        currentOperator = null;
+        dis.setDisplay(Display.MAIN_DISPLAY, null);
     }
 
     public void percentage(View view) {
@@ -134,18 +121,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addition(View view) {
-
-
+        calc = true;
+        prevValue = Double.parseDouble(getMainDisplay());
+        dis.setDisplay(Display.SECOND_DISPLAY, "+");
+        currentOperator = "+";
+        dis.isDisClear = true;
     }
 
     public void equals(View view) {
+        switch (currentOperator) {
+            case "+":
+                add();
+                break;
 
+            case "-":
+                break;
+
+            case "÷":
+                break;
+
+            case "×":
+                break;
+        }
     }
 
     public void dot(View view) {
-        String dis = display.getText().toString();
-        if (!dis.contains(".")) {
-            display.setText(dis + ".");
+
+        if (getMainDisplay().contains(".") && !dis.isDisClear) {
+            return;
+        }
+
+        if (getMainDisplay().length() < 15) {
+            dis.setDisplay(Display.MAIN_DISPLAY, ".");
+        } else {
+            dis.setDisplay(Display.TOAST, "Can't enter more than 15 digits");
         }
     }
 
@@ -172,5 +181,22 @@ public class MainActivity extends AppCompatActivity {
         equals = findViewById(R.id.btn_equals);
         dot = findViewById(R.id.btn_dot);
         delete = findViewById(R.id.btn_delete);
+    }
+
+    private String getMainDisplay() {
+        return display.getText().toString();
+    }
+
+    private void add() {
+        double currentValue = Double.parseDouble(getMainDisplay());
+        String res = (prevValue + currentValue) + "";
+        dis.setDisplay(Display.LOG_CAT, prevValue + " " + currentValue);
+        dis.isDisClear = true;
+
+        if (res.substring(res.length() - 1, res.length()).equals("0")) {
+            res = res.substring(0, res.length() - 2);
+        }
+
+        dis.setDisplay(Display.MAIN_DISPLAY, (res));
     }
 }
